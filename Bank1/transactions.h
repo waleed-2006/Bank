@@ -31,7 +31,7 @@ void printClient(strCleint client) {
         << "\n" << "Phone: " << client.Phone
         << "\n" << "Account Number: " << client.AccountNumber
         << "\n" << "PIN code: " << client.PINcode
-        << "\n" << "Account Number: " << client.AccountBalance ;
+        << "\n" << "Account Balance: " << client.AccountBalance ;
     cout << "\n=============================================\n";
 }
 void printBalance(strCleint client) {
@@ -59,6 +59,22 @@ void ShowAllBalances(vector<strCleint> clients) {
     }
 }
 
+bool printClientDet(vector<strCleint> clients, string AccountNumber) {
+    strCleint client;
+    for (strCleint& record : clients)
+        if (record.AccountNumber == AccountNumber) {
+            client.AccountNumber = record.AccountNumber;
+            client.AccountBalance = record.AccountBalance;
+            client.Name = record.Name;
+            client.markForDelet = record.markForDelet;
+            client.PINcode = record.PINcode;
+            client.Phone = record.Phone;
+            printClient(client);
+            return true;
+        }
+
+    return false;
+}
 
 string ReadAccountNumber(vector<strCleint> &clients) {
     string Account_number;
@@ -84,7 +100,10 @@ bool updateDeposit(string AccountNumber, vector<strCleint>& clients,int amount) 
 bool updateWithdraw(string AccountNumber, vector<strCleint>& clients, int amount) {
     for (strCleint& client : clients)
         if (client.AccountNumber == AccountNumber) {
-
+            while (amount > client.AccountBalance) {
+                cout << "amount to be withdrawn is exeeding the current balance\npleaes enter amount to be withdrawn? ";
+                cin >> amount;
+            }
             client.AccountBalance -= amount;
 
             return true;
@@ -96,7 +115,7 @@ void Perform_Deposit(vector<strCleint>& records, string AccountNumber,
     strCleint& client, string FileName) {
     char update = 'n';
 
-    if (FindClient(records, AccountNumber)) {
+    if (printClientDet(records, AccountNumber)) {
         int deposit_amoutn;
         cout << "Enter Amount of Deposit: ";
         cin >> deposit_amoutn;
@@ -115,17 +134,18 @@ void Perform_Deposit(vector<strCleint>& records, string AccountNumber,
     else
         cout << "Client is not found\n";
 }
+
 void Perform_Withdraw(vector<strCleint>& records, string AccountNumber,
     strCleint& client, string FileName) {
     char update = 'n';
 
-    if (FindClient(records, AccountNumber)) {
+    if (printClientDet(records, AccountNumber)) {
         int deposit_amoutn;
-        cout << "Enter Amount of Withdraw: ";
+        cout << "\nEnter Amount of Withdraw: ";
         cin >> deposit_amoutn;
 
 
-        cout << "Are you sure that you want to withdraw to this account? [Y/N] ";
+        cout << "\nAre you sure that you want to withdraw to this account? [Y/N] ";
         cin >> update;
 
         if (update == 'y' || update == 'Y')
