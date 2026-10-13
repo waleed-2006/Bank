@@ -1,6 +1,6 @@
 # 🏦 Bank Management System
 
-A console-based **Bank Management System written in C++** that allows users to manage bank clients, perform banking transactions, and manage user accounts with permission-based access control through a menu-driven interface.
+A console-based **Bank Management System written in C++** that allows users to manage bank clients, perform banking transactions, and manage user accounts through an authentication system with permission-based access control.
 
 ## ✨ Features
 
@@ -26,7 +26,37 @@ Each client contains:
 - Return to the Main Menu
 - Save updated account balances to the client file
 
-The program verifies that an account exists before performing transactions and persists updated balances in a file.
+The program verifies that an account exists before performing transactions and saves updated balances to a file.
+
+### 🔑 User Authentication (Login System)
+
+The system requires users to log in before accessing the main menu.
+
+**Login process:**
+1. Load registered user records from `Users.txt`.
+2. Prompt the user to enter their username.
+3. Verify that the username exists.
+4. Prompt the user to enter their password.
+5. Validate the password against the stored password.
+6. Set the authenticated user as the current user (`CurrentUser`).
+7. Display the main menu after successful authentication.
+
+**Authentication features:**
+- Verify usernames against registered accounts.
+- Validate passwords before granting access.
+- Prompt users to re-enter an incorrect username or password.
+- Load the authenticated user's permissions.
+- Integrate authentication with the main menu and access-control system.
+
+The program starts by calling `Login()` from `main()`.
+
+```cpp
+int main()
+{
+    Login();
+    return 0;
+}
+```
 
 ### 🔐 User Management
 - List all users
@@ -42,8 +72,9 @@ Each user contains:
 - Password
 - Permissions
 
-### 🛡️ Access Control
-The system includes a permission-based access control mechanism that determines which user-management menu options a logged-in user can access.
+### 🛡️ Permission-Based Access Control
+
+The system uses a permission-based access-control mechanism to determine which user-management menu options the current user can access.
 
 Available permissions include:
 - List users
@@ -53,9 +84,9 @@ Available permissions include:
 - Search for users
 - Full access to all user-management options
 
-## 🖥️ Main Menu
+The special permission value `-1` represents full access. Users without the required permission are denied access to the corresponding user-management operation.
 
-The main menu provides access to client management, banking transactions, and the program's exit option.
+## 🖥️ Menus
 
 ### 💳 Transactions Menu
 
@@ -104,14 +135,14 @@ Bank/
 └── README.md
 ```
 
-*Note: The structure above reflects the expected project organization. Keep the filenames and directory structure consistent with your actual repository.*
+*Note: This is the expected project structure. Actual filenames and locations may vary depending on your repository.*
 
 ## 📝 File Descriptions
 
-- **`Bank1.cpp`** — Contains the `main()` function, main menu, and overall program flow.
+- **`Bank1.cpp`** — Contains the `main()` function, login entry point, main menu, and overall program flow.
 - **`ATM.h`** — Contains ATM-related functionality, if used by the project.
 - **`Client.h`** — Defines the client structure and client-management functions, including adding, deleting, updating, searching, and displaying clients.
-- **`Users.h`** — Defines user records and implements user-management functionality, including permission assignment and access checks.
+- **`Users.h`** — Defines user records and implements user-management functionality, including login-related helpers, permission assignment, and access checks.
 - **`transactions.h`** — Handles deposits, withdrawals, account balances, and the transactions menu.
 - **`filefunctions.h`** — Provides reusable file operations for reading, writing, updating, and deleting records.
 - **`stringfunctions.h`** — Provides reusable string and input utilities.
@@ -141,9 +172,9 @@ Username#//#Password#//#Permissions
 
 Permissions are stored as numeric values corresponding to the available user-management options. The value `-1` represents full access.
 
-The program loads records into vectors, processes operations in memory, and writes updated records back to the corresponding files.
+The application loads records into vectors, performs operations in memory, and writes updated records back to the corresponding files.
 
-**Security note:** Passwords and PIN codes should not be stored in plaintext in a production application. This project uses file-based storage for learning purposes.
+**Security note:** Passwords and PIN codes are stored and processed as plaintext in the current implementation. This approach is intended for learning purposes and should be replaced with secure password hashing and stronger authentication before using the application in a real banking environment.
 
 ## 🛠️ Technologies & Concepts
 
@@ -158,7 +189,8 @@ The program loads records into vectors, processes operations in memory, and writ
 - String manipulation
 - Loops and switch statements
 - Modular programming
-- Authentication and permission checks
+- User authentication
+- Permission-based access control
 - File-based data persistence
 
 ## 🚀 How to Run
@@ -172,6 +204,9 @@ The program loads records into vectors, processes operations in memory, and writ
 2. Open `Bank1.sln` in Visual Studio.
 3. Build the solution using **Build → Build Solution**.
 4. Run the program using **Ctrl + F5**.
+5. Log in using a registered username and password from `Users.txt`.
+
+**Note:** A valid user account must exist in `Users.txt` before logging in. Ensure the required data files are available in the program's working directory.
 
 ## 🎯 Learning Goals
 
@@ -182,7 +217,9 @@ This project was developed to practice building a modular C++ application while 
 - Perform file operations and persist application data.
 - Manipulate strings and validate user input.
 - Build menu-driven console applications.
-- Implement user management and permission-based access control.
+- Implement user authentication and login validation.
+- Manage user accounts and assign permissions.
+- Apply permission-based access control.
 - Integrate multiple features into a single application.
 - Manage project versions using Git and GitHub.
 
@@ -193,6 +230,7 @@ This project was developed to practice building a modular C++ application while 
 - Validate positive deposit and withdrawal amounts.
 - Add transaction history.
 - Hash passwords and improve PIN security.
+- Limit login attempts and improve authentication security.
 - Improve account-number generation.
 - Separate declarations and implementations into `.h` and `.cpp` files.
 - Add automated tests.
