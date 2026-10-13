@@ -14,6 +14,7 @@
 #include "filefunctions.h"
 #include "Client.h"
 #include "transactions.h"
+#include "Users.h"
 
 using namespace std;
 
@@ -24,11 +25,13 @@ enum enMenueScreen
     DeleteClient = 3,
     UpdateClient = 4,
     SearchClient = 5,
-    transactions_menue=6,
-    Exit = 7
+    transactions_menue = 6,
+    ManageUsers = 7,
+    Exit = 8
 };
+
 enMenueScreen ReadMainMenueOption() {
-    cout << "Choose what do want to do [1 to 7]";
+    cout << "Choose what do want to do [1 to 8]";
     short option;
     cin >> option;
     return (enMenueScreen)option;
@@ -40,7 +43,7 @@ void showMainMenue() {
     cout << "             MAIN MENUE                        ";
     cout << "\n=============================================\n";
     cout << "[1] Show client list\n" << "[2] Add New Client\n" <<
-        "[3] Delete Client\n" << "[4] Update Client\n" << "[5] Find client\n" <<  "[6] Transactions Menue\n"<<"[7] Exit";
+        "[3] Delete Client\n" << "[4] Update Client\n" << "[5] Find client\n" <<  "[6] Transactions Menue\n"<<    "[7] Manage Users\n"<<"[8] Logout";
     cout << "\n=============================================\n";
     performMenueOptoin(ReadMainMenueOption());
 }
@@ -115,6 +118,11 @@ void performMenueOptoin(enMenueScreen menueOption) {
         showTransactionsMenue();
         system("pause");
         showMainMenue();
+    case enMenueScreen::ManageUsers:
+        system("cls");
+        ShowUsersMenue();
+        system("pause");
+        showMainMenue();
 
     case enMenueScreen::Exit:
         system("cls");
@@ -124,11 +132,39 @@ void performMenueOptoin(enMenueScreen menueOption) {
     }
 };
 
-    
 
+void Login() {
+    string filename = "Users.txt";
+    vector<strUser> Users = LoadUsersFromFile(filename);
+    string Name;
+    string Password;
+    string StoredPassword;
+
+    system("cls");
+    cout << "\n=============================================\n";
+    cout << "             Log in screen                        ";
+    cout << "\n=============================================\n";
+
+    cout << "enter Name?";
+    getline(cin >>ws, Name);
+    while(!isUserExist(Users, Name)) {
+        cout << "User is not exist!\nenter Name,again? ";
+        getline(cin >> ws, Name);
+    }
+
+    cout << "enter Password?";
+    getline(cin >> ws, Password);
+    StoredPassword = FindUserPassword(Users, Name);
+    while (Password!= StoredPassword ) {
+        cout << "Invalid Password!\nenter Password,again? ";
+        getline(cin >> ws, Password);
+    }
+    CurrentUser= loggedIn(Users, Name);
+    showMainMenue();
+}
 int main()
 {
-    showMainMenue();
+    Login();
  
     return 0;
 }

@@ -35,5 +35,11 @@
     <ClInclude Include="transactions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Users.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ATM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
